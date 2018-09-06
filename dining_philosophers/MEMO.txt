@@ -1,0 +1,79 @@
+https://doc.rust-jp.rs/the-rust-programming-language-ja/1.6/book/dining-philosophers.html
+食事する哲学者
+
+単純な実装ではデッドロックの可能性がある
+
+implブロック：
+  構造体定義。
+
+関連関数(associated function)：
+mpl Philosopher {
+    fn new(name: &str) -> Philosopher {   // 関連関数「new」
+        Philosopher {
+            name: name.to_string(),
+        }
+    }
+}
+関数は &str 型の引数1つ、 name をとります。これは他の文字列への参照です。
+そして Philosopher 構造体のインスタンスを返します。
+
+Rust言語は「式ベース(expression based)」なので、 
+  Rustではほとんどが値を返す式となります。
+  関数についても同じことが言え―最後の式が自動的に戻り値となります。
+
+  Vec<T> は「ベクタ(vector)」とも呼ばれる、可変長の配列型です。
+
+メソッド・関連関数：
+Rustでは、メソッドは明示的な self パラメータを取ります。なので eat() はメソッドとなり、 
+new() は self を取らないため関連関数となります。
+
+スレッド：
+
+イテレーション：
+
+束縛（let）：
+let handles: Vec<_> =
+  _ は型プレースホルダです。 
+    つまり「 handles は何らかの型のベクトルとするが、
+    その型が何であるかはRustが解決せよ。」と言っています。
+
+map 関数：
+let handles: Vec<_> = philosophers.into_iter().map(|p| {
+    thread::spawn(move || {
+        p.eat();
+    })
+}).collect();
+
+所有権：
+ここが並行実行される部分です。
+thread::spawn(move || {
+        p.eat();
+})
+thread::spawn 関数はクロージャを1つ引数にとり、
+新しいスレッド上でそのクロージャを実行します。 
+このクロージャは特別なアノテーション、 move を必要とします。
+これによりキャプチャする値の所有権がクロージャ内へと移動されます。 
+今回のケースでは、 map 関数の変数 p が該当します。
+
+ミューテックス：
+ミューテックスは並行処理を制御するための機構です: 
+  その内容へ同時アクセスできるのは1スレッドに限定されます。
+
+lock() 呼び出しは失敗する可能性があり、その場合は、プログラムをクラッシュさせます。この状況は、ミューテックスが 「poisoned」 状態、 つまりロック保持中のスレッドがパニックした場合にしか発生しません。つまり今は起こりえないため、単に unwrap() を使っています。
+
+もう一つの変わった点として: 結果を _left と _right と名づけました。
+アンダースコアを使えば、Rustにこちらの意図を伝えることができ、 警告されなくなるのです。
+
+「アトミック参照カウント(atomic reference count)」:
+main() では、新しい Table を作って Arc<T> に包んでいます。
+「arc」は「アトミック参照カウント(atomic reference count)」を意味し、 
+複数スレッドから Table を共有するために必要となります。
+共有するときは参照カウントを増やし、 各スレッドの終了時にはカウントを減らします。
+let table = Arc::new(Table { forks: vec![
+        Mutex::new(()),
+        Mutex::new(()),
+        Mutex::new(()),
+        Mutex::new(()),
+        Mutex::new(()),
+    ]});
+

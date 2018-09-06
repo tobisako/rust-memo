@@ -1,0 +1,26 @@
+
+https://doc.rust-jp.rs/the-rust-programming-language-ja/1.6/book/guessing-game.html
+
+cargo build
+cargo run
+
+let foo = 5;  // イミュータブル
+let mut bar = 5;  // ミュータブル
+
+参照：
+&mut String
+
+クレート：パッケージの事です。
+
+セマンティック・バージョニング対応。
+例：  rand="=0.3.0"   // イコール２つある点に注意。
+      rand="*"
+
+Crates.ioはRustのエコシステムに居る人が他人が使うためにオープンソースのRustプロジェクトを投稿する場所です。
+https://crates.io/
+
+シャドーイング：
+  let guess: u32 = guess.trim().parse().expect("hoge!);
+　※文字列なのに、あとからu32属性を追加したる。両方の属性を持つ。
+
+
