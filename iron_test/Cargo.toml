@@ -1,0 +1,8 @@
+[package]
+name = "iron_test"
+version = "0.1.0"
+authors = ["tobisako <tobisako@gmail.com>"]
+
+[dependencies]
+iron = "0.6.0"  # tuiki
+router = "0.6.0"
