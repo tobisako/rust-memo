@@ -1,0 +1,8 @@
+[package]
+name = "RustWin32ApiSample"
+version = "0.1.0"
+authors = ["tobisako <tobisako@gmail.com>"]
+
+[dependencies]
+winapi = "*"
+user32-sys = "*"
