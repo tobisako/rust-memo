@@ -22,7 +22,7 @@ impl IZState {
         let image1 = graphics::Image::new(ctx, "/z.png")?;
         Ok(IZState {
             image1,
-            text: "Rust".to_string(),
+            text: "Rust".to_string(), //.to_string(),
             cnt: 0,
         })
     }
@@ -30,9 +30,9 @@ impl IZState {
 
 // いそいで合体
 mod tools {
-    pub fn get_len(st: &str) -> usize {
-        st.len()
-    }
+    // pub fn get_len(st: &str) -> usize {
+    //     st.len()
+    // }
 
     pub fn get_char(st: &str, pos: usize) -> String {
         let mut str1 = "".to_string();
@@ -51,7 +51,7 @@ impl event::EventHandler for IZState {
         const DESIRED_FPS: u32 = 6;
         while timer::check_update_time(ctx, DESIRED_FPS) {
             self.cnt = self.cnt + 1;
-            if (self.cnt > self.text.len()) {
+            if self.cnt > self.text.len() {
                 self.cnt = 0;
             }
         }
@@ -79,19 +79,20 @@ impl event::EventHandler for IZState {
         // //        graphics::draw(ctx, &text, (dest_point,))?;
         // graphics::draw(ctx, &text, (dest_point, 0.0, graphics::BLACK))?;
 
-        // let text = self.text.to_string();       // NG！！！
-        let text = "Rust";
+        //let text = self.text.to_string(); // NG！！！
+        //let text = "Rust";
         //let size = tools::get_len(text);
         let mut y = 160.0;
         for i in 0..(self.cnt) {
-            let mut c = tools::get_char(text, i);
-            //println!("pos= {}", c);
+            let c = tools::get_char(&self.text.to_string(), i);
             let font = graphics::Font::new(ctx, "/DejaVuSerif.ttf")?;
             let text = graphics::Text::new((c, font, 48.0));
-            let dest_point = cgmath::Point2::new(122.0, y);
+
+            //let dest_point = cgmath::Point2::new(122.0, y);
+            let dest_point = Point2::new(122.0, y);
+
             //        graphics::draw(ctx, &text, (dest_point,))?;
             graphics::draw(ctx, &text, (dest_point, 0.0, graphics::BLACK))?;
-
             y = y + 40.0;
         }
 
