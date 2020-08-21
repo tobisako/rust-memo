@@ -1,0 +1,4 @@
+# ./config/local.toml
+[mongo_db]
+name = "hoge"
+age = 120

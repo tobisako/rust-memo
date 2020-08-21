@@ -1,0 +1,8 @@
+[metajp]
+hoge = 1
+piyo = 10
+huga = 20
+
+[meta]
+foo = "abc"
+bar = "xyz"
