@@ -38,27 +38,41 @@ impl MainState {
         }
     }
 
-    fn print(&mut self, ss: &String) {
+    // ◆エラーケース：
+    pub fn exec(&mut self) {
+        println!("{}", self.main_unit.s);
+        self.print(&self.main_unit.s);
+    }
+    fn print(&self, ss: &String) {
         println!("print: {}", ss);
     }
 
-    pub fn exec(&mut self) {
-        //println!("{}", self.main_unit.s);
-        self.print(&self.main_unit.s);
-    }
-}
+    // ◆解決法１：中身を変更しないので &self レシーバーで渡す
+    // pub fn exec2(&mut self) {
+    //     println!("exec2() {}", self.main_unit.s);
+    //     self.print2(&self.main_unit.s);
+    // }
+    // fn print2(&self, ss: &String) {
+    //     println!("print: {}", ss);
+    // }
 
-// error[E0502]: cannot borrow `*self` as mutable because it is also borrowed as immutable
-//   --> src/main.rs:47:9
-//    |
-// 47 |         self.print(&self.main_unit.s);
-//    |         ^^^^^-----^-----------------^
-//    |         |    |     |
-//    |         |    |     immutable borrow occurs here
-//    |         |    immutable borrow later used by call
-//    |         mutable borrow occurs here
+}
 
 fn main() {
+
     let mut ms = MainState::new();
     ms.exec();
+
+    // let mut ms2 = MainState::new();
+    // ms2.exec2();
 }
+
+// これは printが &mut self を要求するのに対して、&self.main_unit.s がもうあるのでRustの借用ルール（&mut があるなら&はとれない）に違反するからです
+// 中身を変更しないなら &self レシーバを使う必要があります
+// どうしてもmutabilityが必要な場合回避するためのテクニックがいくつかあります
+
+// 典型的には
+// fn f(a: &mut Hoge, b: &Huga) {}
+// let Struct { a, b, c } = self; 
+// f(a, b);
+// のようにselfを分解するとか

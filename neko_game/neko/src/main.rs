@@ -12,26 +12,21 @@ type Point2 = cgmath::Point2<f32>;
 
 trait UnitActions {
 
-    // OK
     fn draw_unit(&mut self, ctx: &mut Context) -> GameResult;
 
-    // // err:使えていない
-    // fn draw_unit_2(&mut self, ctx: &mut Context) -> GameResult;
-
-    // // err:問題が解決できない
-    // fn draw(&mut self, ctx: &mut Context, img: &mut graphics::Image, px: u32, py: u32) -> GameResult {
-    //     let point2_new = |x, y| {
-    //         let cast_u32_f32 = |cp: u32| { cp as f32 };
-    //         Point2::new(cast_u32_f32(x), cast_u32_f32(y))
-    //     };
-    //     graphics::draw(
-    //         ctx,
-    //         img,
-    //         graphics::DrawParam::new()
-    //             .dest(point2_new(px, py))
-    //     )?;
-    //     Ok(())
-    // }
+    fn draw(&self, ctx: &mut Context, img: &graphics::Image, px: u32, py: u32) -> GameResult {
+        let point2_new = |x, y| {
+            let cast_u32_f32 = |cp: u32| { cp as f32 };
+            Point2::new(cast_u32_f32(x), cast_u32_f32(y))
+        };
+        graphics::draw(
+            ctx,
+            img,
+            graphics::DrawParam::new()
+                .dest(point2_new(px, py))
+        )?;
+        Ok(())
+    }
 }
 
 struct MainUnit {
@@ -42,23 +37,8 @@ struct MainUnit {
 
 impl UnitActions for MainUnit {
     fn draw_unit(&mut self, ctx: &mut Context) -> GameResult {
-        let point2_new = |x, y| {
-            let cast_u32_f32 = |cp: u32| { cp as f32 };
-            Point2::new(cast_u32_f32(x), cast_u32_f32(y))
-        };
-        graphics::draw(
-            ctx,
-            &self.image,
-            graphics::DrawParam::new()
-                .dest(point2_new(self.x, self.y))
-        )?;
-        Ok(())
+        self.draw(ctx, &self.image, self.x, self.y)
     }
-
-    // // err:使えていない
-    // fn draw_unit_2(&mut self, ctx: &mut Context) -> GameResult {
-    //     self.draw(ctx, &mut self.image, self.x, self.y)
-    // }
 }
 
 struct EnemyUnit {
@@ -69,23 +49,8 @@ struct EnemyUnit {
 
 impl UnitActions for EnemyUnit {
     fn draw_unit(&mut self, ctx: &mut Context) -> GameResult {
-        let point2_new = |x, y| {
-            let cast_u32_f32 = |cp: u32| { cp as f32 };
-            Point2::new(cast_u32_f32(x), cast_u32_f32(y))
-        };
-        graphics::draw(
-            ctx,
-            &self.image,
-            graphics::DrawParam::new()
-                .dest(point2_new(self.x, self.y))
-        )?;
-        Ok(())
+        self.draw(ctx, &self.image, self.x, self.y)
     }
-
-    // // err:使えていない
-    // fn draw_unit_2(&mut self, ctx: &mut Context) -> GameResult {
-    //     self.draw(ctx, &mut self.image, self.x, self.y)
-    // }
 }
 
 struct MainState {
