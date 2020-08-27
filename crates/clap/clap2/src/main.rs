@@ -35,8 +35,10 @@ pub fn cli_app<'a, 'b>() -> App<'a, 'b> {
                     .arg(Arg::with_name("continue_after_checks")
                         .short("c")
                         .long("continue_after_checks")
+//                        .required(false)
                         .takes_value(true)
-                        .default_value("false")
+//                        .default_value("default")
+//                        .possible_values(&["true", "false", "default"])
                         .help("Continue after checks (default false)"))
         )
         .subcommand(
@@ -78,14 +80,37 @@ pub fn run_eth1_sim(matches: &ArgMatches) -> Result<(), String> {
     println!("spd up = {}", speed_up_factor);
     println!("---");
 
+    println!("---");
 
     // continue_after_checks 
     let is_present_continue_after_checks = matches.is_present("continue_after_checks");
     println!("continue_after_checks is_present={}", is_present_continue_after_checks);
 
+    println!("---");
+
+    let ss = matches.value_of("continue_after_checks").unwrap_or("nashi");
+    println!("ss={}", ss);
+        // これでは、なぜか値が取れない。なぜ？
+
+
+    println!("---");
+
     if is_present_continue_after_checks {
-        let continue_after_checks = value_t!(matches, "continue_after_checks", bool).expect("NG!");
-        println!("value={}", continue_after_checks);
+
+        // let hoge = matches.value_of("continue_after_checks").unwrap();
+        // println!("hoge={}", hoge);
+
+        // match matches.occurrences_of("continue_after_checks") {
+        //     true => println!("true"),
+        //     false => println!("false"),
+        //     _ => println!("_"),
+        // }
+
+        // let continue_after_checks = value_t!(matches, "continue_after_checks", bool).expect("NG!");
+        // println!("value={}", continue_after_checks);
+
+
+        
     } else {
         println!("value is nothing (default)");
     }
@@ -94,7 +119,6 @@ pub fn run_eth1_sim(matches: &ArgMatches) -> Result<(), String> {
     // //println!("speed_up_factor {}", continue_after_checks);
     // let continue_after_checks = value_t!(matches, "continue_after_checks", bool).expect("NG!");
     // println!("atai = {}", continue_after_checks);
-
 
     // let continue_after_checks = matches.is_present("continue_after_checks");
     // let param = value_t!(matches, "continue_after_checks", u64).expect("missing default");
